@@ -64,7 +64,7 @@
 
 const { getProviderChain } = require('../config/providers');
 const { hasQuota, recordUsage } = require('./creditTracker');
-const { normalizeResult } = require('./normalizeResult');
+const { normalizeResult } = require('./normalizeresult');
 
 /**
  * Verifies a single email address by walking the provider chain.
