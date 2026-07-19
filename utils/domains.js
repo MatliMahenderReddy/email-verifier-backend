@@ -1,7 +1,6 @@
 // Small built-in lists so the project works out of the box with zero network
 // calls at startup. For production, replace/extend these with a maintained
 // list such as https://github.com/disposable-email-domains/disposable-email-domains
-// (load it into a Set at boot, same shape as below).
 
 const DISPOSABLE_DOMAINS = new Set([
   "mailinator.com", "10minutemail.com", "guerrillamail.com", "tempmail.com",
