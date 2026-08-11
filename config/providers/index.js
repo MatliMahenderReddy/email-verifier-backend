@@ -40,6 +40,8 @@
 
 const quickEmailVerification = require('./quickEmailVerification');
 const hunter = require('./hunter');
+const verifalia = require('./verifalia');
+const verifaliaAccounts = require('./verifaliaAccounts');
 const ownVerifier = require('./ownVerifier');
 
 // Order matters: first provider with quota left AND a configured API key is tried first.
@@ -57,6 +59,12 @@ function getProviderChain() {
       verify: hunter.verify,
       dailyLimit: parseInt(process.env.HUNTER_DAILY_LIMIT || '25', 10),
       hasKey: () => !!process.env.HUNTER_API_KEY,
+    },
+    {
+      name: verifalia.name,
+      verify: verifalia.verify,
+      dailyLimit: verifaliaAccounts.getVerifaliaProviderDailyLimit(),
+      hasKey: () => verifaliaAccounts.getVerifaliaAccountCount() > 0,
     },
     {
       name: ownVerifier.name,

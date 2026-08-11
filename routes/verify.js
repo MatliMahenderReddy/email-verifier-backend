@@ -55,7 +55,7 @@ router.post('/upload', requireAuth, upload.single('file'), async (req, res) => {
 });
 
 // GET /api/verify/status  -> shows today's usage/remaining quota per provider
-router.get('/status', requireAuth, (req, res) => {
+router.get('/status',  (req, res) => {
   const chain = getProviderChain().map((p) => ({
     name: p.name,
     dailyLimit: p.dailyLimit === Infinity ? 'unlimited' : p.dailyLimit,
