@@ -46,16 +46,41 @@ async function verify(email) {
     throw new Error(`${NAME}: no entries returned; status=${result?.overview?.status}`);
   }
 
+  // const entry = result.entries[0];
+  // const classification = entry.classification;
+  // const status = entry.status || classification;
+  // const valid = [
+  //   'Deliverable',
+  //   'Risky',
+  //   'Acceptable',
+  //   'AcceptAll',
+  //   'Success',
+  // ].includes(classification) || status === 'Success';
+
+  // return {
+  //   provider: NAME,
+  //   email,
+  //   valid,
+  //   status,
+  //   score: entry.score ?? null,
+  //   reason: entry.status === 'Failed' ? entry.classification || 'Failed' : null,
+  //   disposable: Boolean(entry.isDisposableEmailAddress),
+  //   freeProvider: Boolean(entry.isFreeEmailAddress),
+  //   roleAccount: Boolean(entry.isRoleAccount),
+  //   catchAll: Boolean(entry.isCatchAll),
+  //   raw: result,
+  // };
   const entry = result.entries[0];
   const classification = entry.classification;
-  const status = entry.status || classification;
-  const valid = [
-    'Deliverable',
-    'Risky',
-    'Acceptable',
-    'AcceptAll',
-    'Success',
-  ].includes(classification) || status === 'Success';
+
+  const CLASSIFICATION_TO_STATUS = {
+    Deliverable: 'deliverable',
+    Undeliverable: 'undeliverable',
+    Risky: 'risky',
+    Unknown: 'unknown',
+  };
+  const status = CLASSIFICATION_TO_STATUS[classification] || 'unknown';
+  const valid = status === 'deliverable' || (status === 'risky' && entry.isCatchAll);
 
   return {
     provider: NAME,
@@ -63,7 +88,8 @@ async function verify(email) {
     valid,
     status,
     score: entry.score ?? null,
-    reason: entry.status === 'Failed' ? entry.classification || 'Failed' : null,
+    reason: entry.status === 'Failed' ? classification || 'Failed' : null,
+    domain: email.split('@')[1]?.toLowerCase() || null,
     disposable: Boolean(entry.isDisposableEmailAddress),
     freeProvider: Boolean(entry.isFreeEmailAddress),
     roleAccount: Boolean(entry.isRoleAccount),
