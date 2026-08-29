@@ -141,12 +141,7 @@ function getUsageReport(providers) {
 }
 
 // ---------------- MongoDB bootstrap ----------------
-// Runs once when this module is first required. Connects to Mongo (if
-// configured) and, if today's usage doc already exists there (e.g. from
-// before the server restarted), restores it into the JSON file so counts
-// aren't lost. This is the fix for "credits reset to 0 on restart" — most
-// hosts wipe local disk on redeploy, so JSON alone can't survive that, but
-// Mongo does.
+
 async function bootstrapMongo() {
   if (!MONGODB_URI) {
     console.warn('[credits] MONGODB_URI not set — running on JSON file only, same as before');
@@ -184,9 +179,6 @@ async function bootstrapMongo() {
   }
 }
 
-// Kick off the bootstrap immediately on module load. hasQuota/recordUsage/
-// getUsageReport remain fully synchronous throughout — nothing else in the
-// app has to change or await anything.
 bootstrapMongo();
 
 module.exports = { hasQuota, recordUsage, getUsageReport };
