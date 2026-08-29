@@ -179,9 +179,7 @@ async function bootstrapMongo() {
     }
 
     mongoReady = true;
-    console.log('[credits] MongoDB connected — usage will now survive restarts');
   } catch (err) {
-    console.error('[credits] MongoDB unavailable, continuing on JSON file only:', err.message);
     mongoReady = false;
   }
 }
